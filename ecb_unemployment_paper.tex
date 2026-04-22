@@ -16,7 +16,6 @@
 \usepackage{parskip}
 \usepackage{tabularx}
 \usepackage{threeparttable}
-\usepackage{tabularray}
 
 \hypersetup{
   colorlinks=true,
@@ -80,7 +79,7 @@ Our paper contributes to this literature by providing quasi-experimental evidenc
 
 Our study employs three empirical strategies: OLS cross-sectional regressions to characterize the pre-treatment relationship between debt and unemployment, a standard two-group DiD comparing high-debt and low-debt Eurozone countries, and a battery of SUTVA robustness checks that directly test for spillover contamination of the control group.
 
-The OLS regressions confirm a positive association between government debt-to-GDP ratios and unemployment levels in the pre-treatment period. The main DiD specification, with country and year-month fixed effects and standard errors clustered at the country level, estimates the differential treatment effect of ECB rate hikes on high-debt versus low-debt Eurozone countries. The SUTVA checks --- including dropping the most trade-exposed control countries, testing whether trade exposure predicts unemployment changes within the control group, and using continuous treatment intensity --- help assess whether spillovers bias our estimates. The event study confirms that pre-treatment trends are parallel and that any differential effect emerges only after July 2022.
+The OLS regressions confirm a positive association between government debt-to-GDP ratios and unemployment levels in the pre-treatment period. The main DiD specification, with country and year-month fixed effects and standard errors clustered at the country level, estimates the differential treatment effect of ECB rate hikes on high-debt versus low-debt Eurozone countries. The SUTVA checks --- including dropping the most trade-exposed control countries and using continuous treatment intensity --- help assess whether spillovers bias our estimates. The event study confirms that pre-treatment trends are parallel and that any differential effect emerges only after July 2022.
 
 % ══════════════════════════════════════════════════════════════════════════════
 \section{Descriptive Statistics}
@@ -113,7 +112,6 @@ Several limitations should be acknowledged. Country-level data may mask signific
 
 Table~\ref{tab:sumstats} presents summary statistics for the key variables in the panel.
 
-% modelsummary/kableExtra output already includes \begin{table}...\end{table}
 \input{tables/summary_stats.tex}
 
 \subsection{Descriptive Evidence}
@@ -179,7 +177,7 @@ where $\mathbf{X}_i$ includes log GDP per capita and population density. Table~\
 
 \input{tables/ols_table.tex}
 
-Figure~\ref{fig:avp} shows actual vs.\ predicted unemployment for each OLS specification, with countries color-coded by debt group. Points above the 45-degree line are under-predicted (actual unemployment exceeds the model's prediction); points below are over-predicted. The progression from Model 1 to Model 3 shows improving fit as controls are added, with the residual segments (distance from the 45-degree line) shrinking. Greece consistently lies above the line even in the fullest specification, reflecting country-specific labor market features not captured by our controls.
+Figure~\ref{fig:avp} shows actual vs.\ predicted unemployment for each OLS specification, with countries color-coded by debt group. Points above the 45-degree line are under-predicted (actual unemployment exceeds the model's prediction); points below are over-predicted. The progression from Model 1 to Model 3 shows improving fit as controls are added. Greece consistently lies above the line even in the fullest specification, reflecting country-specific labor market features not captured by our controls.
 
 \begin{figure}[H]
 \centering
@@ -208,37 +206,30 @@ Column (1) is the basic DiD without fixed effects. Columns (2)--(4) add two-way 
 
 The Stable Unit Treatment Value Assumption (SUTVA) requires that the treatment status of one unit does not affect outcomes of other units. In our context, this assumption is potentially violated through two main channels.
 
-\textbf{Trade channel:} If ECB rate hikes depress aggregate demand in Italy or Spain (high-debt countries facing tighter financial conditions), this reduces their imports from Germany and the Netherlands (control countries), potentially raising unemployment in the control group. This contamination biases our DiD estimate \textit{toward zero}: we underestimate the true differential effect because control countries are also partially affected by the treatment through trade linkages.
+\textbf{Trade channel:} If ECB rate hikes depress aggregate demand in Italy or Spain, this reduces their imports from Germany and the Netherlands, potentially raising unemployment in the control group. This biases our DiD estimate \textit{toward zero}: we underestimate the true differential effect because control countries are also partially affected through trade linkages.
 
 \textbf{Financial channel:} Sovereign stress in high-debt countries can spill over through cross-border bank exposures. German and Dutch banks holding Italian or Spanish sovereign debt face balance sheet losses when spreads widen, potentially tightening credit in their home markets.
 
-Figure~\ref{fig:trade} shows that control countries' export exposure to the treated group varies considerably. This variation motivates our robustness strategy: if spillovers matter, the most trade-exposed control countries should show the largest unemployment effects.
+Figure~\ref{fig:trade} documents the scale of these linkages. Export exposure of control countries to the treated group varies from approximately 14\% (Finland) to 38\% (Luxembourg), with Germany at 26\%. This heterogeneity in trade exposure motivates our robustness strategy.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{figures/plot_trade_exposure.pdf}
-\caption{Export share of each control country destined for the six treated countries (2021).}
+\caption{Export share of each control country destined for the six treated countries (2021). Source: Eurostat Comext.}
 \label{fig:trade}
 \end{figure}
 
-We implement three robustness checks:
+We implement three robustness checks, reported in Table~\ref{tab:sutva}.
 
-\textbf{Test 1} drops Luxembourg and Germany (the most trade-exposed controls). If SUTVA violations through trade linkages contaminate the control group, removing the most-exposed countries should \textit{increase} the estimated $|\hat{\delta}|$, since the remaining control group is ``cleaner.''
+\textbf{Test 1} drops Luxembourg and Germany (the most trade-exposed controls). If SUTVA violations contaminate the control group through trade linkages, removing these countries should increase the estimated $|\hat{\delta}|$, since the remaining control group is cleaner.
 
-\textbf{Test 2} tests within the control group whether higher trade exposure to treated countries predicts larger unemployment increases post-treatment (Figure~\ref{fig:sutva_scatter}). A positive and significant slope would indicate that trade spillovers are actively contaminating our control group. An insignificant slope is reassuring.
+\textbf{Test 2} assesses within the control group whether higher trade exposure to treated countries predicts larger post-treatment unemployment increases. With only six control countries, a formal regression has insufficient power to yield reliable inference, so we assess this qualitatively: if Luxembourg and Germany --- the two most trade-exposed members (Figure~\ref{fig:trade}) --- show notably larger post-treatment unemployment increases than Finland and Ireland, this would indicate active spillover contamination. We discuss this pattern in the context of the robustness results in Table~\ref{tab:sutva}.
 
 \textbf{Test 3} uses the continuous debt-to-GDP ratio interacted with Post as a treatment intensity measure, sidestepping the binary classification entirely. This specification does not require SUTVA in the traditional sense because it uses continuous variation rather than a binary treatment-control distinction.
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.85\textwidth]{figures/plot_sutva_scatter.pdf}
-\caption{SUTVA diagnostic: trade exposure to treated countries vs.\ post-treatment unemployment change within the control group. A significant positive slope would indicate spillover contamination.}
-\label{fig:sutva_scatter}
-\end{figure}
-
 \input{tables/sutva_table.tex}
 
-Regardless of results, SUTVA violations through the trade and financial channels bias our estimates conservatively: the true differential effect of ECB rate hikes on high-debt countries is likely at least as large as what we estimate, because some of the ``treatment effect'' spills over into control country outcomes, compressing the treatment-control gap.
+Regardless of results, SUTVA violations through the trade and financial channels bias our estimates conservatively: the true differential effect of ECB rate hikes on high-debt countries is likely at least as large as what we estimate, because spillovers push control-group unemployment upward and compress the treatment-control gap.
 
 \subsection{Event Study}
 
@@ -258,17 +249,17 @@ The reference period is $k = -1$ (June 2022, the month before the first rate hik
 \label{fig:eventstudy}
 \end{figure}
 
-The event study serves three purposes. First, it provides a visual check of the parallel trends assumption: if pre-treatment coefficients hover around zero (within the confidence bands), we cannot reject that the two groups were on similar trajectories before the ECB began hiking. Second, it reveals whether effects appear \textit{before} the official treatment date, which would suggest either anticipation effects (markets pricing in hikes via forward guidance) or a violation of the research design. Third, the post-treatment coefficients show whether the effect is immediate, gradual, persistent, or transitory --- information that a single DiD coefficient cannot provide.
+The event study serves three purposes. First, it provides a visual check of the parallel trends assumption: if pre-treatment coefficients hover around zero within the confidence bands, we cannot reject that the two groups were on similar trajectories before the ECB began hiking. Second, it reveals whether effects appear \textit{before} the official treatment date, which would suggest anticipation effects (markets pricing in hikes via forward guidance). Third, the post-treatment coefficients show whether the effect is immediate, gradual, persistent, or transitory --- information that a single DiD coefficient cannot provide.
 
 \subsection{Additional Threats to Identification}
 
-\paragraph{Concurrent Shocks.} The energy crisis disproportionately affected Germany due to its gas dependency on Russia, potentially increasing unemployment in the control group through a channel unrelated to ECB rate hikes. Conversely, NextGenerationEU (NGEU) transfers flowed disproportionately to Italy and Spain, partially offsetting tighter financial conditions. Country and time fixed effects absorb common trends but cannot control for country-specific time-varying confounders that coincide with treatment.
+\paragraph{Concurrent Shocks.} The energy crisis disproportionately affected Germany due to its gas dependency on Russia, potentially increasing unemployment in the control group through a channel unrelated to ECB rate hikes. Conversely, NextGenerationEU transfers flowed disproportionately to Italy and Spain, partially offsetting tighter financial conditions. Country and time fixed effects absorb common trends but cannot control for country-specific time-varying confounders that coincide with treatment.
 
-\paragraph{Anticipation Effects.} Markets may have priced in rate hikes before July 2022 through ECB forward guidance and the June 2022 announcement of the anti-fragmentation instrument (TPI). If sovereign spreads widened before the actual first hike, the treatment effect may have started earlier than our design assumes. The event study assesses whether significant effects appear in the months immediately before July 2022.
+\paragraph{Anticipation Effects.} Markets may have priced in rate hikes before July 2022 through ECB forward guidance and the June 2022 announcement of the TPI. The event study assesses whether significant effects appear in the months immediately before July 2022.
 
-\paragraph{Small Number of Clusters.} With only 12 clusters, conventional clustered standard errors may over-reject. Cameron et al.\ (2008) recommend at least 30 clusters for asymptotic inference to be reliable. Wild cluster bootstrap $p$-values, which we report throughout, are our preferred basis for statistical significance.
+\paragraph{Small Number of Clusters.} With only 12 clusters, conventional clustered standard errors may over-reject. Cameron et al.\ (2008) recommend at least 30 clusters for reliable asymptotic inference. Wild cluster bootstrap $p$-values, which we report throughout, are our preferred basis for statistical significance.
 
-\paragraph{Heterogeneous Treatment Effects.} Greece (debt/GDP $>$ 200\%) and Italy ($\approx$ 155\%) face very different sovereign spread dynamics than France ($\approx$ 113\%) or Belgium ($\approx$ 108\%). Our average treatment effect masks this heterogeneity. The continuous-intensity specification (Test 3 in the SUTVA section) partially addresses this by allowing the effect to scale with the debt-to-GDP ratio.
+\paragraph{Heterogeneous Treatment Effects.} Greece (debt/GDP $>$ 200\%) and Italy ($\approx$ 155\%) face very different sovereign spread dynamics than France ($\approx$ 113\%) or Belgium ($\approx$ 108\%). Our average treatment effect masks this heterogeneity, which the continuous-intensity specification partially addresses.
 
 \paragraph{Composition of Policy Mix.} Countries differed in labor market reforms, fiscal adjustments, and sector-specific recoveries (e.g., tourism in Southern Europe) during this period. These are not captured by our controls and may confound $\hat{\delta}$.
 
@@ -315,3 +306,4 @@ Our findings carry direct implications for the design of Eurozone institutions. 
 \end{thebibliography}
 
 \end{document}
+
